@@ -11,34 +11,8 @@
   <hr class="party-config__divider" />
 
   <ul class="party-config__list" aria-label="Parties">
-    <chart-form-row
-      label="Partido Rojo"
-      cssClasses="party-row__color party-row__color--red"
-      votes="35"
-    />
-
-    <chart-form-row
-      label="Partido Azul"
-      cssClasses="party-row__color party-row__color--blue"
-      votes="42"
-    />
-
-    <chart-form-row
-      label="Partido Verde"
-      cssClasses="party-row__color party-row__color--green"
-      votes="28"
-    />
-
-    <chart-form-row
-      label="Partido Amarillo"
-      cssClasses="party-row__color party-row__color--yellow"
-      votes="23"
-    />
-
-    <chart-form-row
-      label="Partido Naranja"
-      cssClasses="party-row__color party-row__color--orange"
-      votes="15"
-    />
+    @for (party of parties(); track party.id) {
+      <chart-form-row [party]="party" />
+    }
   </ul>
 </section>

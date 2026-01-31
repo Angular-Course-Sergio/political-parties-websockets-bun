@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+import { Party } from '../../../types';
 
 @Component({
   selector: 'chart-form-row',
@@ -7,7 +8,5 @@ import { Component, input } from '@angular/core';
   styleUrls: ['./chart-form-row.css'],
 })
 export class ChartFormRow {
-  label = input.required<string>();
-  cssClasses = input.required<string>();
-  votes = input.required<string>();
+  public party = input.required<Party>();
 }

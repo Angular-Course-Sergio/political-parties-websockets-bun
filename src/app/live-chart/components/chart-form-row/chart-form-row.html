@@ -1,14 +1,20 @@
 <li class="party-row">
-  <input [class]="cssClasses()" type="checkbox" [aria-label]="'Select' + label()" />
+  <input
+    class="party-row__color"
+    [style.border-color]="party().borderColor"
+    [style.background-color]="party().color"
+    type="checkbox"
+    [aria-label]="'Select' + party().name"
+  />
 
-  <input class="party-row__name" type="text" [value]="label()" aria-label="Party name" />
+  <input class="party-row__name" type="text" [value]="party().name" aria-label="Party name" />
 
   <div class="party-row__controls" aria-label="Party value controls">
     <button class="party-row__control-button" type="button" aria-label="Decrease value">
       <span aria-hidden="true">−</span>
     </button>
 
-    <span class="party-row__value" aria-label="Current value">{{ votes() }}</span>
+    <span class="party-row__value" aria-label="Current value">{{ party().votes }}</span>
 
     <button class="party-row__control-button" type="button" aria-label="Increase value">
       <span aria-hidden="true">+</span>
