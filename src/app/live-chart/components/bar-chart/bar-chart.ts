@@ -1,32 +1,29 @@
-import { Component, ElementRef, OnInit, viewChild } from '@angular/core';
-import { Chart } from 'chart.js';
+import { Component, ElementRef, input, OnDestroy, OnInit, viewChild } from '@angular/core';
+import { Chart, ChartData } from 'chart.js';
 
 @Component({
   selector: 'bar-chart',
   imports: [],
   templateUrl: './bar-chart.html',
 })
-export class BarChart implements OnInit {
+export class BarChart implements OnInit, OnDestroy {
   private readonly canvasRef = viewChild<ElementRef<HTMLCanvasElement>>('chart');
+  private chartInstance: Chart | null = null;
+  public chartData = input.required<ChartData<'bar'>>();
 
   ngOnInit(): void {
     const canvas = this.canvasRef()?.nativeElement;
     if (!canvas) throw new Error('Canvas element not found');
 
-    new Chart(canvas, {
+    this.chartInstance = new Chart(canvas, {
       type: 'bar',
-      data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [
-          {
-            label: '# of Votes',
-            backgroundColor: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            data: [12, 19, 3, 5, 2, 3],
-            borderWidth: 1,
-          },
-        ],
-      },
+      data: this.chartData(),
       options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
         scales: {
           y: {
             beginAtZero: true,
@@ -34,5 +31,9 @@ export class BarChart implements OnInit {
         },
       },
     });
+  }
+
+  ngOnDestroy(): void {
+    this.chartInstance?.destroy();
   }
 }

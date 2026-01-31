@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { BarChart } from '../../components/bar-chart/bar-chart';
 
 @Component({
@@ -7,4 +7,16 @@ import { BarChart } from '../../components/bar-chart/bar-chart';
   templateUrl: './chart-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChartPage {}
+export class ChartPage {
+  chartData = computed(() => ({
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    datasets: [
+      {
+        label: '# of Votes',
+        backgroundColor: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange', 'Cyan'],
+        data: [12, 19, 3, 5, 2, 3, 7],
+        borderWidth: 1,
+      },
+    ],
+  }));
+}
