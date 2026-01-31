@@ -1,4 +1,6 @@
-<h1>Partidos Políticos</h1>
+<h1>
+  Partidos Políticos <small>{{ webSocketService.connectionStatus() }}</small>
+</h1>
 
 <!-- Chart -->
 <bar-chart [chartData]="chartData()" />
