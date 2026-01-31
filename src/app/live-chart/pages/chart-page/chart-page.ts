@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { BarChart } from '../../components/bar-chart/bar-chart';
+import { ChartForm } from '../../components/chart-form/chart-form';
 
 @Component({
   selector: 'app-chart-page',
-  imports: [BarChart],
+  imports: [BarChart, ChartForm],
   templateUrl: './chart-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -13,7 +14,6 @@ export class ChartPage {
     datasets: [
       {
         label: '# of Votes',
-        backgroundColor: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange', 'Cyan'],
         data: [12, 19, 3, 5, 2, 3, 7],
         borderWidth: 1,
       },
