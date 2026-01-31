@@ -5,11 +5,14 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  signal,
 } from '@angular/core';
+import { ChartData } from 'chart.js';
+import { Subscription } from 'rxjs';
+import type { Party } from '../../../types/index';
+import { WebSocketConnectionService } from '../../../web-sockets/services/web-socket-connection.service';
 import { BarChart } from '../../components/bar-chart/bar-chart';
 import { ChartForm } from '../../components/chart-form/chart-form';
-import { WebSocketConnectionService } from '../../../web-sockets/services/web-socket-connection.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chart-page',
@@ -18,24 +21,34 @@ import { Subscription } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChartPage implements OnInit, OnDestroy {
-  webSocketService = inject(WebSocketConnectionService);
+  public webSocketService = inject(WebSocketConnectionService);
+  public onMessageSubscription: Subscription | null = null;
 
-  onMessageSubscription: Subscription | null = null;
+  protected parties = signal<Party[]>([]);
 
-  chartData = computed(() => ({
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  protected chartData = computed<ChartData<'bar'>>(() => ({
+    labels: this.parties().map((party) => party.name),
     datasets: [
       {
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3, 7],
-        borderWidth: 1,
+        label: 'Votos',
+        data: this.parties().map((party) => party.votes),
+        backgroundColor: this.parties().map((party) => party.color),
+        borderColor: this.parties().map((party) => party.borderColor),
+        borderWidth: 3,
+        borderRadius: 10,
       },
     ],
   }));
 
   ngOnInit(): void {
     this.onMessageSubscription = this.webSocketService.onMessage.subscribe((message) => {
-      console.log('New message from server:', message);
+      const { type, payload } = message;
+
+      switch (type) {
+        case 'PARTIES_LIST':
+          this.parties.set(payload);
+          break;
+      }
     });
   }
 

@@ -3,7 +3,11 @@
 </h1>
 
 <!-- Chart -->
-<bar-chart [chartData]="chartData()" />
+@if (parties().length > 0) {
+  <bar-chart [chartData]="chartData()" />
+} @else {
+  <p>No hay datos disponibles para mostrar el gráfico.</p>
+}
 
 <!-- CRUD para el control de los partidos -->
 <chart-form />
