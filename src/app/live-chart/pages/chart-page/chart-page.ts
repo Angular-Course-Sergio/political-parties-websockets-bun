@@ -1,7 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { BarChart } from '../../components/bar-chart/bar-chart';
 import { ChartForm } from '../../components/chart-form/chart-form';
 import { WebSocketConnectionService } from '../../../web-sockets/services/web-socket-connection.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chart-page',
@@ -9,8 +17,10 @@ import { WebSocketConnectionService } from '../../../web-sockets/services/web-so
   templateUrl: './chart-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChartPage {
+export class ChartPage implements OnInit, OnDestroy {
   webSocketService = inject(WebSocketConnectionService);
+
+  onMessageSubscription: Subscription | null = null;
 
   chartData = computed(() => ({
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -22,4 +32,14 @@ export class ChartPage {
       },
     ],
   }));
+
+  ngOnInit(): void {
+    this.onMessageSubscription = this.webSocketService.onMessage.subscribe((message) => {
+      console.log('New message from server:', message);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.onMessageSubscription?.unsubscribe();
+  }
 }

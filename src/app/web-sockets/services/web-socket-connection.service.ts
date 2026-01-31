@@ -1,4 +1,6 @@
 import { effect, Injectable, signal } from '@angular/core';
+import { ClientMessage, ServerMessage } from '../types';
+import { Subject } from 'rxjs';
 
 type ConnectionState = 'connected' | 'disconnected' | 'connecting';
 
@@ -8,6 +10,7 @@ type ConnectionState = 'connected' | 'disconnected' | 'connecting';
 export class WebSocketConnectionService {
   private socket: WebSocket | null = null;
   public connectionStatus = signal<ConnectionState>('connecting');
+  public onMessage = new Subject<ServerMessage>();
 
   constructor() {
     this.connectWebSocket();
@@ -47,7 +50,13 @@ export class WebSocketConnectionService {
     });
 
     this.socket.addEventListener('message', (event) => {
-      console.log('WebSocket message received: ', event.data);
+      const data: ServerMessage = JSON.parse(event.data);
+      this.onMessage.next(data);
     });
+  }
+
+  public sendMessage(message: ClientMessage) {
+    if (!this.socket) throw new Error('WebSocket is not initialized');
+    this.socket.send(JSON.stringify(message));
   }
 }
