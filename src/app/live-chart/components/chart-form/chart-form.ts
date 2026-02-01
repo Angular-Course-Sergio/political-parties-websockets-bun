@@ -10,4 +10,12 @@ import { Party } from '../../../types';
 })
 export class ChartForm {
   public parties = input.required<Party[]>();
+
+  incrementVotes(party: Party) {}
+
+  decrementVotes(party: Party) {}
+
+  deleteParty(party: Party) {}
+
+  updateParty(party: Party) {}
 }

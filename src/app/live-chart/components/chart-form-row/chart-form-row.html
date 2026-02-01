@@ -4,23 +4,44 @@
     [style.border-color]="party().borderColor"
     [style.background-color]="party().color"
     type="checkbox"
-    [aria-label]="'Select' + party().name"
+    [aria-label]="'Select ' + party().name"
   />
 
-  <input class="party-row__name" type="text" [value]="party().name" aria-label="Party name" />
+  <input
+    class="party-row__name"
+    type="text"
+    [value]="party().name"
+    (input)="updatePartyName($event.target.value)"
+    aria-label="Party name"
+  />
 
   <div class="party-row__controls" aria-label="Party value controls">
-    <button class="party-row__control-button" type="button" aria-label="Decrease value">
+    <button
+      class="party-row__control-button"
+      type="button"
+      aria-label="Decrease value"
+      (click)="decrementVotes.emit(party())"
+    >
       <span aria-hidden="true">−</span>
     </button>
 
     <span class="party-row__value" aria-label="Current value">{{ party().votes }}</span>
 
-    <button class="party-row__control-button" type="button" aria-label="Increase value">
+    <button
+      class="party-row__control-button"
+      type="button"
+      aria-label="Increase value"
+      (click)="incrementVotes.emit(party())"
+    >
       <span aria-hidden="true">+</span>
     </button>
 
-    <button class="party-row__delete-button" type="button" aria-label="Delete party">
+    <button
+      class="party-row__delete-button"
+      type="button"
+      aria-label="Delete party"
+      (click)="deleteParty.emit(party())"
+    >
       <span aria-hidden="true">×</span>
     </button>
   </div>
