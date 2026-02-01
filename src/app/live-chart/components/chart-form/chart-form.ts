@@ -1,6 +1,7 @@
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { ChartFormRow } from '../chart-form-row/chart-form-row';
 import { Party } from '../../../types';
+import { WebSocketConnectionService } from '../../../web-sockets/services/web-socket-connection.service';
 
 @Component({
   selector: 'chart-form',
@@ -10,12 +11,56 @@ import { Party } from '../../../types';
 })
 export class ChartForm {
   public parties = input.required<Party[]>();
+  private webSocketService = inject(WebSocketConnectionService);
 
-  incrementVotes(party: Party) {}
+  incrementVotes(party: Party) {
+    this.webSocketService.sendMessage({
+      type: 'INCREMENT_VOTES',
+      payload: { id: party.id },
+    });
+  }
 
-  decrementVotes(party: Party) {}
+  decrementVotes(party: Party) {
+    this.webSocketService.sendMessage({
+      type: 'DECREMENT_VOTES',
+      payload: { id: party.id },
+    });
+  }
 
-  deleteParty(party: Party) {}
+  deleteParty(party: Party) {
+    this.webSocketService.sendMessage({
+      type: 'DELETE_PARTY',
+      payload: { id: party.id },
+    });
+  }
 
-  updateParty(party: Party) {}
+  updateParty(party: Party) {
+    this.webSocketService.sendMessage({
+      type: 'UPDATE_PARTY',
+      payload: party,
+    });
+  }
+
+  addParty() {
+    const baseColor = this.getRandomHexColor();
+
+    this.webSocketService.sendMessage({
+      type: 'ADD_PARTY',
+      payload: {
+        name: 'New Party',
+        color: baseColor + '33',
+        borderColor: baseColor,
+        votes: 0,
+      },
+    });
+  }
+
+  private getRandomHexColor() {
+    return (
+      '#' +
+      Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, '0')
+    );
+  }
 }

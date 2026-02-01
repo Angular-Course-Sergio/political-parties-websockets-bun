@@ -48,6 +48,22 @@ export class ChartPage implements OnInit, OnDestroy {
         case 'PARTIES_LIST':
           this.parties.set(payload);
           break;
+        case 'VOTES_UPDATED':
+          this.parties.update((parties) =>
+            parties.map((party) => (party.id === payload.id ? payload : party)),
+          );
+          break;
+        case 'PARTY_DELETED':
+          this.parties.update((parties) => parties.filter((party) => party.id !== payload.id));
+          break;
+        case 'PARTY_UPDATED':
+          this.parties.update((parties) =>
+            parties.map((party) => (party.id === payload.id ? payload : party)),
+          );
+          break;
+        case 'PARTY_ADDED':
+          this.parties.update((parties) => [...parties, payload]);
+          break;
       }
     });
   }

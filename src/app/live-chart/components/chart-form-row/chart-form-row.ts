@@ -23,7 +23,6 @@ export class ChartFormRow {
     }
 
     this.updatePartyTimeout = setTimeout(() => {
-      console.log('Emitting updateParty for', name);
       this.updateParty.emit({
         ...this.party(),
         name,
